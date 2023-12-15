@@ -1,14 +1,10 @@
 package com.headlyboi.discordbot.service;
 
-import com.headlyboi.discordbot.enums.ApexRankRole;
-import com.headlyboi.discordbot.handler.DiscordChannelHandler;
+import com.headlyboi.discordbot.enums.ApexRank;
 import lombok.RequiredArgsConstructor;
 import net.dv8tion.jda.api.entities.Guild;
-import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.Role;
 import net.dv8tion.jda.api.events.guild.GenericGuildEvent;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 import java.awt.Color;
@@ -26,15 +22,15 @@ public class RoleService {
         Guild guild = event.getGuild();
         List<Role> guildRoles = event.getGuild().getRoles();
 
-        TreeMap<String, ApexRankRole> rolesToCreate = new TreeMap<>(Arrays.stream(ApexRankRole.values())
-                .collect(Collectors.toMap(ApexRankRole::getName, Function.identity())));
+        TreeMap<String, ApexRank> rolesToCreate = new TreeMap<>(Arrays.stream(ApexRank.values())
+                .collect(Collectors.toMap(ApexRank::getValue, Function.identity())));
         for (Role role : guildRoles) {
             rolesToCreate.remove(role.getName());
         }
 
-        for (ApexRankRole apexRankRole : rolesToCreate.values()) {
-            String roleName = apexRankRole.getName();
-            Color roleColor = apexRankRole.getRoleColor().getColor();
+        for (ApexRank apexRank : rolesToCreate.values()) {
+            String roleName = apexRank.getValue();
+            Color roleColor = apexRank.getApexColor().getColor();
             createRole(guild, roleName, roleColor);
         }
     }

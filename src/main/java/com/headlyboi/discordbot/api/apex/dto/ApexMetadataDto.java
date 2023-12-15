@@ -1,4 +1,4 @@
-package com.headlyboi.discordbot.api.dto;
+package com.headlyboi.discordbot.api.apex.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AllArgsConstructor;
@@ -9,9 +9,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class ApexRankScoreDto {
+public class ApexMetadataDto {
 
-    private ApexMetadataDto metadata;
-
-    private Integer value;
+    private String rank;
 }
