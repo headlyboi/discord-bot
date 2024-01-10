@@ -15,7 +15,7 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class CommandService {
 
-    public void updateCommands(GenericGuildEvent event) {
+    public void updateCommands(final GenericGuildEvent event) {
         Guild guild = event.getGuild();
         guild.updateCommands().addCommands(
                 Commands.slash("apex-stats", "get rank from tracker.gg")

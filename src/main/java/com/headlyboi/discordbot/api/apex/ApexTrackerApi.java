@@ -30,7 +30,7 @@ public class ApexTrackerApi {
 
     private final ObjectMapper objectMapper = new ObjectMapper();
 
-    public Optional<ApexWrapperDataDto> getPlayerData(Platform platform, String id) {
+    public Optional<ApexWrapperDataDto> getPlayerData(final Platform platform, final String id) {
         try {
             URI uri = new URI(String.format(propertiesUtil.getPlayerDataUrl(), platform.getValue(), id));
             String responseJson = restTemplate.getForObject(uri, String.class);

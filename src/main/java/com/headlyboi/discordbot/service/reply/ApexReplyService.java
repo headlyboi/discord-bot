@@ -32,7 +32,7 @@ public class ApexReplyService implements IBotReplyService {
 
 
     @Override
-    public String replyStats(ApexWrapperDataDto apexWrapperDataDto) {
+    public String replyStats(final ApexWrapperDataDto apexWrapperDataDto) {
         Optional<ApexSegmentDto> overview = apexWrapperDataDto.getData().getOverview();
 
         if (overview.isPresent()) {

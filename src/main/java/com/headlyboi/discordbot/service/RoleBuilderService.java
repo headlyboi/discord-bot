@@ -38,7 +38,7 @@ public class RoleBuilderService {
         }
     }
 
-    public void addRoleToUser(SlashCommandInteractionEvent event, ApexRank rank) {
+    public void addRoleToUser(final SlashCommandInteractionEvent event, final ApexRank rank) {
         List<Role> guildRoles = Objects.requireNonNull(event.getGuild()).getRoles();
 
         TreeMap<String, ApexRank> rolesToCreate = new TreeMap<>(Arrays.stream(ApexRank.values())
@@ -57,7 +57,7 @@ public class RoleBuilderService {
 
     }
 
-    private void createRole(Guild guild, String name, Color color) {
+    private void createRole(final Guild guild, final String name, final Color color) {
         guild.createRole()
                 .setName(name)
                 .setColor(color)

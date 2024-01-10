@@ -18,17 +18,17 @@ public enum ApexRank {
 
     private final ApexColor apexColor;
 
-    ApexRank(String value, ApexColor apexColor) {
+    ApexRank(final String value, final ApexColor apexColor) {
         this.value = value;
         this.apexColor = apexColor;
     }
 
-    public static ApexRank getApexRank(String rank) {
+    public static ApexRank getApexRank(final String rank) {
         if (rank == null) {
             return ROOKIE;
         }
         for (ApexRank apexRank : ApexRank.values()) {
-            if (rank.contains(apexRank.value)){
+            if (rank.contains(apexRank.value)) {
                 return apexRank;
             }
         }

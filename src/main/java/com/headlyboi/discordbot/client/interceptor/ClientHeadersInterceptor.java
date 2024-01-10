@@ -27,7 +27,8 @@ public class ClientHeadersInterceptor implements ClientHttpRequestInterceptor {
 
     @NotNull
     @Override
-    public ClientHttpResponse intercept(HttpRequest request, @NotNull byte[] body, ClientHttpRequestExecution execution) throws IOException {
+    public ClientHttpResponse intercept(final HttpRequest request, @NotNull final byte[] body,
+                                        final ClientHttpRequestExecution execution) throws IOException {
         HttpHeaders headers = request.getHeaders();
         headers.add(TRN_API_KEY, propertiesUtil.getTrackerToken());
 

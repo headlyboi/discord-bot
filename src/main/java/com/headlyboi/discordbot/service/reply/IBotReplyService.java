@@ -4,5 +4,5 @@ import com.headlyboi.discordbot.api.apex.dto.ApexWrapperDataDto;
 
 public interface IBotReplyService {
 
-    String replyStats(ApexWrapperDataDto apexWrapperDataDto);
+    String replyStats(final ApexWrapperDataDto apexWrapperDataDto);
 }

@@ -16,7 +16,7 @@ public enum Platform {
         this.value = value;
     }
 
-    public static Platform findPlatform(String value) {
+    public static Platform findPlatform(final String value) {
         for (Platform platform : Platform.values()) {
             if (value.equals(platform.getValue())) {
                 return platform;

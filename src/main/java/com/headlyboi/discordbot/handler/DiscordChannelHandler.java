@@ -6,10 +6,13 @@ import com.headlyboi.discordbot.service.ProcessService;
 import com.headlyboi.discordbot.service.RoleBuilderService;
 import com.headlyboi.discordbot.util.PropertiesUtil;
 import lombok.RequiredArgsConstructor;
+import net.dv8tion.jda.api.events.GenericEvent;
 import net.dv8tion.jda.api.events.guild.GuildJoinEvent;
 import net.dv8tion.jda.api.events.guild.GuildReadyEvent;
+import net.dv8tion.jda.api.events.guild.voice.GuildVoiceUpdateEvent;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
+import net.dv8tion.jda.api.events.user.update.UserUpdateOnlineStatusEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import net.dv8tion.jda.api.interactions.commands.SlashCommandInteraction;
 import org.jetbrains.annotations.NotNull;
@@ -24,18 +27,15 @@ public class DiscordChannelHandler extends ListenerAdapter {
     private static final Logger LOGGER = LoggerFactory.getLogger(DiscordChannelHandler.class);
 
     private final ChannelService channelService;
-
+    private final ProcessService processService;
+    private final CommandService commandService;
+    private final PropertiesUtil propertiesUtil;
     private final RoleBuilderService roleBuilderService;
 
-    private final ProcessService processService;
-
-    private final CommandService commandService;
-
-
-    private final PropertiesUtil propertiesUtil;
-
     @Override
-    public void onMessageReceived(MessageReceivedEvent event) {
+    public void onMessageReceived(@NotNull final MessageReceivedEvent event) {
+        LOGGER.info("MessageReceivedEvent: {}", event);
+
         boolean isCorrectChannel = propertiesUtil.getChannelName().equals(event.getChannel().getName());
         boolean isBot = event.getMessage().getAuthor().isBot();
         if (isCorrectChannel && !isBot) {
@@ -44,25 +44,34 @@ public class DiscordChannelHandler extends ListenerAdapter {
     }
 
     @Override
-    public void onGuildJoin(@NotNull GuildJoinEvent event) {
-        LOGGER.info("GuildJoinEvent: {}", event.getGuild());
+    public void onGuildVoiceUpdate(@NotNull final GuildVoiceUpdateEvent event) {
+        LOGGER.info("MessageReceivedEvent: {}", event);
+        // TODO: do some logic in future
+    }
+
+    @Override
+    public void onGuildJoin(@NotNull final GuildJoinEvent event) {
+        LOGGER.info("GuildJoinEvent: {}", event);
+
         channelService.createTextChannel(event);
         roleBuilderService.buildRoles(event);
         commandService.updateCommands(event);
     }
 
     @Override
-    public void onGuildReady(@NotNull GuildReadyEvent event) {
-        LOGGER.info("GuildReadyEvent: {}", event.getGuild());
+    public void onGuildReady(@NotNull final GuildReadyEvent event) {
+        LOGGER.info("GuildReadyEvent: {}", event);
+
         channelService.createTextChannel(event);
         roleBuilderService.buildRoles(event);
         commandService.updateCommands(event);
     }
 
     @Override
-    public void onSlashCommandInteraction(SlashCommandInteractionEvent event) {
+    public void onSlashCommandInteraction(@NotNull final SlashCommandInteractionEvent event) {
+        LOGGER.info("SlashCommandInteractionEvent: {}", event);
+
         boolean isCorrectChannel = propertiesUtil.getChannelName().equals(event.getChannel().getName());
-
         if (isCorrectChannel) {
             SlashCommandInteraction interaction = event.getInteraction();
             switch (interaction.getName()) {

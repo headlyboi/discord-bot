@@ -18,7 +18,7 @@ public enum ApexColor {
 
     private final Color color;
 
-    ApexColor(Color color) {
+    ApexColor(final Color color) {
         this.color = color;
     }
 }

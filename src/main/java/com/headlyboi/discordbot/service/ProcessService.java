@@ -4,6 +4,7 @@ import com.headlyboi.discordbot.api.apex.ApexTrackerApi;
 import com.headlyboi.discordbot.api.apex.dto.ApexWrapperDataDto;
 import com.headlyboi.discordbot.enums.ApexRank;
 import com.headlyboi.discordbot.enums.Platform;
+import com.headlyboi.discordbot.repository.ApexRepository;
 import com.headlyboi.discordbot.service.reply.IBotReplyService;
 import lombok.RequiredArgsConstructor;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
@@ -24,12 +25,14 @@ public class ProcessService {
 
     private final RoleBuilderService roleBuilderService;
 
-    public void processApex(SlashCommandInteractionEvent event) {
-        SlashCommandInteraction interaction = event.getInteraction();
+    private final ApexRepository apexRepository;
+
+    public void processApex(final SlashCommandInteractionEvent event) {
+        SlashCommandInteraction commandInteraction = event.getInteraction();
 
         Platform platform = Platform.findPlatform(Objects.
-                requireNonNull(interaction.getOption("platform")).getAsString());
-        String nickName = Objects.requireNonNull(interaction.getOption("nickname")).getAsString();
+                requireNonNull(commandInteraction.getOption("platform")).getAsString());
+        String nickName = Objects.requireNonNull(commandInteraction.getOption("nickname")).getAsString();
 
         try {
             Optional<ApexWrapperDataDto> playerData = apexTrackerApi.getPlayerData(platform, nickName);
@@ -39,8 +42,10 @@ public class ProcessService {
             } else {
                 ApexWrapperDataDto apexDataDto = playerData.get();
                 event.reply(replyService.replyStats(apexDataDto)).queue();
-                ApexRank apexRank = ApexRank.getApexRank(apexDataDto.getData().getOverview().get().getStats().getRankScore().getMetadata().getRank());
+                ApexRank apexRank = ApexRank.getApexRank(apexDataDto.getData().getOverview().orElseThrow()
+                        .getStats().getRankScore().getMetadata().getRank());
                 roleBuilderService.addRoleToUser(event, apexRank);
+                apexRepository.save(Objects.requireNonNull(event.getMember()).getIdLong(), apexDataDto);
             }
         } catch (HttpServerErrorException e) {
             event.reply("Player " + nickName + " not found!").queue();

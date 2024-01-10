@@ -17,7 +17,7 @@ public class ChannelService {
 
     private final PropertiesUtil propertiesUtil;
 
-    public void createTextChannel(GenericGuildEvent event) {
+    public void createTextChannel(final GenericGuildEvent event) {
         Guild guild = event.getGuild();
         List<GuildChannel> channels = guild.getChannels();
         boolean contains = false;
