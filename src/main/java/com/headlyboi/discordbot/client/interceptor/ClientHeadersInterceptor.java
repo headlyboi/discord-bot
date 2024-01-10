@@ -22,9 +22,6 @@ public class ClientHeadersInterceptor implements ClientHttpRequestInterceptor {
     private final PropertiesUtil propertiesUtil;
 
     private static final String TRN_API_KEY = "TRN-Api-Key";
-    private static final String ACCEPT = "Accept";
-
-    private static final String APPLICATION_JSON = "application/json; charset=utf-8";
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ClientHeadersInterceptor.class);
 
@@ -33,7 +30,6 @@ public class ClientHeadersInterceptor implements ClientHttpRequestInterceptor {
     public ClientHttpResponse intercept(HttpRequest request, @NotNull byte[] body, ClientHttpRequestExecution execution) throws IOException {
         HttpHeaders headers = request.getHeaders();
         headers.add(TRN_API_KEY, propertiesUtil.getTrackerToken());
-        headers.add(ACCEPT, APPLICATION_JSON);
 
         logRequestDetails(request);
         return execution.execute(request, body);
