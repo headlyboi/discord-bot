@@ -1,5 +1,7 @@
 package com.headlyboi.discordbot.service;
 
+import com.headlyboi.discordbot.util.PropertiesUtil;
+import lombok.RequiredArgsConstructor;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.channel.ChannelType;
 import net.dv8tion.jda.api.entities.channel.middleman.GuildChannel;
@@ -10,24 +12,23 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
+@RequiredArgsConstructor
 public class ChannelService {
 
-    @Value("${discord.channel.name}")
-    private String channelName;
+    private final PropertiesUtil propertiesUtil;
 
-
-    public void createTextChannel(GenericGuildEvent event) {
+    public void createTextChannel(final GenericGuildEvent event) {
         Guild guild = event.getGuild();
-        List<GuildChannel> channels = event.getGuild().getChannels();
+        List<GuildChannel> channels = guild.getChannels();
         boolean contains = false;
         for (GuildChannel channel : channels) {
-            if (ChannelType.TEXT.equals(channel.getType()) && channelName.equals(channel.getName())) {
+            if (ChannelType.TEXT.equals(channel.getType()) && propertiesUtil.getChannelName().equals(channel.getName())) {
                 contains = true;
                 break;
             }
         }
         if (!contains) {
-            guild.createTextChannel(channelName).queue();
+            guild.createTextChannel(propertiesUtil.getChannelName()).queue();
         }
     }
 }

@@ -6,7 +6,7 @@ import java.awt.Color;
 
 
 @Getter
-public enum RoleColor {
+public enum ApexColor {
 
     BROWN(new Color(184, 145, 129)),
     GRAY(new Color(210, 210, 222)),
@@ -18,7 +18,7 @@ public enum RoleColor {
 
     private final Color color;
 
-    RoleColor(Color color) {
+    ApexColor(final Color color) {
         this.color = color;
     }
 }

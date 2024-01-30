@@ -15,4 +15,13 @@ public enum Platform {
     Platform(String value) {
         this.value = value;
     }
+
+    public static Platform findPlatform(final String value) {
+        for (Platform platform : Platform.values()) {
+            if (value.equals(platform.getValue())) {
+                return platform;
+            }
+        }
+        return Platform.ORIGIN;
+    }
 }
