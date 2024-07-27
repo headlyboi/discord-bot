@@ -4,12 +4,16 @@ import com.headlyboi.discordbot.api.apex.ApexTrackerApi;
 import com.headlyboi.discordbot.api.apex.dto.ApexWrapperDataDto;
 import com.headlyboi.discordbot.enums.ApexRank;
 import com.headlyboi.discordbot.enums.Platform;
+import com.headlyboi.discordbot.handler.DiscordChannelHandler;
 import com.headlyboi.discordbot.repository.ApexRepository;
 import com.headlyboi.discordbot.service.reply.IBotReplyService;
 import lombok.RequiredArgsConstructor;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.interactions.commands.SlashCommandInteraction;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.HttpServerErrorException;
 
 import java.util.Objects;
@@ -18,6 +22,8 @@ import java.util.Optional;
 @Service
 @RequiredArgsConstructor
 public class ProcessService {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(DiscordChannelHandler.class);
 
     private final ApexTrackerApi apexTrackerApi;
 
@@ -49,6 +55,9 @@ public class ProcessService {
             }
         } catch (HttpServerErrorException e) {
             event.reply("Player " + nickName + " not found!").queue();
+        } catch (HttpClientErrorException e){
+            LOGGER.error("Error while fetching player data", e);
+            event.reply("Server error. Pls contact administrator!").queue();
         }
     }
 }
