@@ -1,4 +1,4 @@
-package com.headlyboi.discordbot.api.apex.dto;
+package com.headlyboi.discordbot.api.apex.dto.trackergg;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AllArgsConstructor;

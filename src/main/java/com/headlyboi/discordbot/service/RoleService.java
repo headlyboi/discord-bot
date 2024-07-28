@@ -12,14 +12,13 @@ import java.awt.*;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
-import java.util.Set;
 import java.util.TreeMap;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
 @Component
 @RequiredArgsConstructor
-public class RoleBuilderService {
+public class RoleService {
 
     public void buildRoles(GenericGuildEvent event) {
         Guild guild = event.getGuild();

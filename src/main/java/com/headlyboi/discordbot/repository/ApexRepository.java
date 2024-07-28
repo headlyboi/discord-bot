@@ -1,6 +1,6 @@
 package com.headlyboi.discordbot.repository;
 
-import com.headlyboi.discordbot.api.apex.dto.ApexWrapperDataDto;
+import com.headlyboi.discordbot.api.apex.dto.trackergg.ApexWrapperDataDto;
 import org.springframework.stereotype.Component;
 
 import java.util.HashMap;

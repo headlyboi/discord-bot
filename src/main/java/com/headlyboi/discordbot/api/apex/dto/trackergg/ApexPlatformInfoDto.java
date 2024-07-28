@@ -1,4 +1,4 @@
-package com.headlyboi.discordbot.api.apex.dto;
+package com.headlyboi.discordbot.api.apex.dto.trackergg;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AllArgsConstructor;
@@ -9,10 +9,14 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class ApexSegmentDto {
+public class ApexPlatformInfoDto {
 
-    private String type;
+    private String platformSlug;
 
-    private ApexStatsDto stats;
+    private String platformUserId;
+
+    private String platformUserHandle;
+
+    private String platformUserIdentifier;
 
 }

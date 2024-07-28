@@ -1,12 +1,11 @@
 package com.headlyboi.discordbot.service;
 
-import com.headlyboi.discordbot.api.apex.ApexTrackerApi;
-import com.headlyboi.discordbot.api.apex.dto.ApexWrapperDataDto;
+import com.headlyboi.discordbot.api.apex.ApexApi;
+import com.headlyboi.discordbot.api.apex.dto.mozambique.MozambiqueWrapperDto;
 import com.headlyboi.discordbot.enums.ApexRank;
 import com.headlyboi.discordbot.enums.Platform;
 import com.headlyboi.discordbot.handler.DiscordChannelHandler;
-import com.headlyboi.discordbot.repository.ApexRepository;
-import com.headlyboi.discordbot.service.reply.IBotReplyService;
+import com.headlyboi.discordbot.service.reply.ApexReplyService;
 import lombok.RequiredArgsConstructor;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.interactions.commands.SlashCommandInteraction;
@@ -25,13 +24,9 @@ public class ProcessService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(DiscordChannelHandler.class);
 
-    private final ApexTrackerApi apexTrackerApi;
-
-    private final IBotReplyService replyService;
-
-    private final RoleBuilderService roleBuilderService;
-
-    private final ApexRepository apexRepository;
+    private final ApexApi<MozambiqueWrapperDto> mozambiqueTrackerApi;
+    private final RoleService roleService;
+    private final ApexReplyService apexReplyService;
 
     public void processApex(final SlashCommandInteractionEvent event) {
         SlashCommandInteraction commandInteraction = event.getInteraction();
@@ -41,21 +36,19 @@ public class ProcessService {
         String nickName = Objects.requireNonNull(commandInteraction.getOption("nickname")).getAsString();
 
         try {
-            Optional<ApexWrapperDataDto> playerData = apexTrackerApi.getPlayerData(platform, nickName);
+            Optional<MozambiqueWrapperDto> playerData = mozambiqueTrackerApi.getPlayerData(platform, nickName);
 
             if (playerData.isEmpty()) {
                 event.reply("Player " + nickName + " not found!").queue();
             } else {
-                ApexWrapperDataDto apexDataDto = playerData.get();
-                event.reply(replyService.replyStats(apexDataDto)).queue();
-                ApexRank apexRank = ApexRank.getApexRank(apexDataDto.getData().getOverview().orElseThrow()
-                        .getStats().getRankScore().getMetadata().getRank());
-                roleBuilderService.addRoleToUser(event, apexRank);
-                apexRepository.save(Objects.requireNonNull(event.getMember()).getIdLong(), apexDataDto);
+                String repliedText = apexReplyService.replyStats(playerData.get());
+                ApexRank apexRank = ApexRank.getApexRank(playerData.get().getGlobal().getRank().getRankName());
+                event.reply(repliedText).queue();
+                roleService.addRoleToUser(event, apexRank);
             }
         } catch (HttpServerErrorException e) {
             event.reply("Player " + nickName + " not found!").queue();
-        } catch (HttpClientErrorException e){
+        } catch (HttpClientErrorException e) {
             LOGGER.error("Error while fetching player data", e);
             event.reply("Server error. Pls contact administrator!").queue();
         }

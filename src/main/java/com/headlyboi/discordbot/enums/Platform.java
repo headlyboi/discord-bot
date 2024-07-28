@@ -5,6 +5,7 @@ import lombok.Getter;
 @Getter
 public enum Platform {
 
+    PC("PC"),
     ORIGIN("origin"),
     STEAM("steam"),
     XBL("xbl"),

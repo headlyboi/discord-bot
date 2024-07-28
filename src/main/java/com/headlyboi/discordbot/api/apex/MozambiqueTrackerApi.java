@@ -1,8 +1,7 @@
 package com.headlyboi.discordbot.api.apex;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.headlyboi.discordbot.api.apex.dto.ApexWrapperDataDto;
+import com.headlyboi.discordbot.api.apex.dto.mozambique.MozambiqueWrapperDto;
 import com.headlyboi.discordbot.enums.Platform;
 import com.headlyboi.discordbot.util.PropertiesUtil;
 import lombok.RequiredArgsConstructor;
@@ -12,7 +11,6 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
 import java.net.URI;
-import java.net.URISyntaxException;
 import java.util.Optional;
 
 /**
@@ -20,27 +18,25 @@ import java.util.Optional;
  */
 @Component
 @RequiredArgsConstructor
-public class ApexTrackerApi {
+public class MozambiqueTrackerApi implements ApexApi<MozambiqueWrapperDto>{
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(ApexTrackerApi.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(MozambiqueTrackerApi.class);
 
     private final PropertiesUtil propertiesUtil;
-
     private final RestTemplate restTemplate;
-
     private final ObjectMapper objectMapper = new ObjectMapper();
 
-    public Optional<ApexWrapperDataDto> getPlayerData(final Platform platform, final String id) {
+    public Optional<MozambiqueWrapperDto> getPlayerData(Platform platform, String name) {
+
         try {
-            URI uri = new URI(String.format(propertiesUtil.getPlayerDataUrl(), platform.getValue(), id));
+            URI uri = new URI(String.format(propertiesUtil.getPlayerDataUrl(), propertiesUtil.getTrackerToken(), name, platform.getValue()));
             String responseJson = restTemplate.getForObject(uri, String.class);
-            ApexWrapperDataDto apexWrapperDataDto = objectMapper.readValue(responseJson, ApexWrapperDataDto.class);
-            apexWrapperDataDto.setLink(String.format(propertiesUtil.getApexTrackerLink(), platform.getValue(), id));
+            MozambiqueWrapperDto apexWrapperDataDto = objectMapper.readValue(responseJson, MozambiqueWrapperDto.class);
 
             return Optional.of(apexWrapperDataDto);
-        } catch (URISyntaxException | JsonProcessingException e) {
+        } catch (Exception e) {
+            LOGGER.error("Failed to get player data", e);
             return Optional.empty();
         }
     }
-
 }

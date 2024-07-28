@@ -19,7 +19,4 @@ public class PropertiesUtil {
 
     @Value("${url.tracker.gg.player.data}")
     private String playerDataUrl;
-
-    @Value("${apex.tracker.link}")
-    private String apexTrackerLink;
 }

@@ -3,16 +3,14 @@ package com.headlyboi.discordbot.handler;
 import com.headlyboi.discordbot.service.ChannelService;
 import com.headlyboi.discordbot.service.CommandService;
 import com.headlyboi.discordbot.service.ProcessService;
-import com.headlyboi.discordbot.service.RoleBuilderService;
+import com.headlyboi.discordbot.service.RoleService;
 import com.headlyboi.discordbot.util.PropertiesUtil;
 import lombok.RequiredArgsConstructor;
-import net.dv8tion.jda.api.events.GenericEvent;
 import net.dv8tion.jda.api.events.guild.GuildJoinEvent;
 import net.dv8tion.jda.api.events.guild.GuildReadyEvent;
 import net.dv8tion.jda.api.events.guild.voice.GuildVoiceUpdateEvent;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
-import net.dv8tion.jda.api.events.user.update.UserUpdateOnlineStatusEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import net.dv8tion.jda.api.interactions.commands.SlashCommandInteraction;
 import org.jetbrains.annotations.NotNull;
@@ -30,7 +28,7 @@ public class DiscordChannelHandler extends ListenerAdapter {
     private final ProcessService processService;
     private final CommandService commandService;
     private final PropertiesUtil propertiesUtil;
-    private final RoleBuilderService roleBuilderService;
+    private final RoleService roleService;
 
     @Override
     public void onMessageReceived(@NotNull final MessageReceivedEvent event) {
@@ -54,7 +52,7 @@ public class DiscordChannelHandler extends ListenerAdapter {
         LOGGER.info("GuildJoinEvent: {}", event);
 
         channelService.createTextChannel(event);
-        roleBuilderService.buildRoles(event);
+        roleService.buildRoles(event);
         commandService.updateCommands(event);
     }
 
@@ -63,7 +61,7 @@ public class DiscordChannelHandler extends ListenerAdapter {
         LOGGER.info("GuildReadyEvent: {}", event);
 
         channelService.createTextChannel(event);
-        roleBuilderService.buildRoles(event);
+        roleService.buildRoles(event);
         commandService.updateCommands(event);
     }
 

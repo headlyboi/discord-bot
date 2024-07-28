@@ -19,7 +19,8 @@ public class CommandService {
         Guild guild = event.getGuild();
         guild.updateCommands().addCommands(
                 Commands.slash("apex-stats", "get rank from tracker.gg")
-                        .addOptions(new OptionData(OptionType.STRING, "platform", "Origin/Steam/Xbl/Psn", true)
+                        .addOptions(new OptionData(OptionType.STRING, "platform", "PC/Origin/Steam/Xbl/Psn", true)
+                                .addChoice("\uD83C\uDFA7 PC", Platform.PC.getValue())
                                 .addChoice("\uD83C\uDF51 Origin", Platform.ORIGIN.getValue())
                                 .addChoice("\uD83C\uDFAE Xbox", Platform.XBL.getValue())
                                 .addChoice("\uD83C\uDFAE PlayStation", Platform.PSN.getValue())
